@@ -31,7 +31,21 @@ const getAllArticles = (req, res) => {
   res.json(articles);
 };
 
+const getAnArticleById = (req, res) => {
+  const id = req.params.id;
+  let i;
+  const found = articles.find((element, index) => {
+    i = index;
+    return (element.id = id);
+  });
+  if (found) {
+    res.json(articles[i]);
+    res.status(200);
+  }
+};
+
 app.get("/articles", getAllArticles);
+app.get("/articles/:id", getAnArticleById);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
