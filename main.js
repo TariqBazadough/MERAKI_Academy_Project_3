@@ -1,7 +1,6 @@
-const { Console } = require("console");
 const express = require("express");
-const { CLIENT_RENEG_LIMIT } = require("tls");
 const app = express();
+const { v4: uuidv4 } = require("uuid");
 
 const port = 5000;
 
@@ -42,8 +41,8 @@ const getAnArticleById = (req, res) => {
     return element.id == id;
   });
   if (found) {
-    res.json(articles[i]);
     res.status(200);
+    res.json(articles[i]);
   }
 };
 
@@ -53,12 +52,24 @@ const getArticlesByAuthor = (req, res) => {
   const filterByAuthor = articles.filter((element) => {
     return element.author === author;
   });
-
-  res.json(filterByAuthor);
   res.status(200);
+  res.json(filterByAuthor);
+};
+
+const createNewArticle = (req, res) => {
+  const newArticle = {
+    title: req.body.title,
+    description: req.body.description,
+    author: req.body.author,
+    id: uuidv4(),
+  };
+  articles.push(newArticle);
+  res.status(201);
+  res.json(newArticle);
 };
 
 app.get("/articles", getAllArticles);
+app.post("/articles", createNewArticle);
 app.get("/articles/search_2", getAnArticleById);
 app.get("/articles/search_1", getArticlesByAuthor);
 
