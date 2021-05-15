@@ -99,7 +99,22 @@ const deleteArticleById = (req, res) => {
     return element.id == id;
   });
   articles.splice(i, 1);
+  res.status(200);
   res.json({ success: true, massage: `Success Delete article with id ${id}` });
+};
+
+const deleteArticlesByAuthor = (req, res) => {
+  const author = req.body.author;
+  articles.forEach((element, index) => {
+    if (element.author === author) {
+      articles.splice(index, 1);
+    }
+  });
+  res.status(200);
+  res.json({
+    success: true,
+    massage: `Success delete all the articles for the author => ${author}`,
+  });
 };
 
 app.get("/articles", getAllArticles);
@@ -108,6 +123,7 @@ app.get("/articles/search_2", getAnArticleById);
 app.get("/articles/search_1", getArticlesByAuthor);
 app.put("/articles/:id", updateAnArticleById);
 app.delete("/articles/:id", deleteArticleById);
+app.delete("/articles", deleteArticlesByAuthor);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
