@@ -91,11 +91,23 @@ const updateAnArticleById = (req, res) => {
   res.json(articles[i]);
 };
 
+const deleteArticleById = (req, res) => {
+  const id = req.params.id;
+  let i;
+  const found = articles.find((element, index) => {
+    i = index;
+    return element.id == id;
+  });
+  articles.splice(i, 1);
+  res.json({ success: true, massage: `Success Delete article with id ${id}` });
+};
+
 app.get("/articles", getAllArticles);
 app.post("/articles", createNewArticle);
 app.get("/articles/search_2", getAnArticleById);
 app.get("/articles/search_1", getArticlesByAuthor);
 app.put("/articles/:id", updateAnArticleById);
+app.delete("/articles/:id", deleteArticleById);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
