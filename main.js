@@ -82,25 +82,14 @@ const createNewArticle = (req, res) => {
 
 const updateAnArticleById = (req, res) => {
   const id = req.params.id;
-  const title = req.body.title;
-  const description = req.body.description;
-  const author = req.body.author;
-  let i;
-  const found = articles.find((element, index) => {
-    i = index;
-    return element.id == id;
-  });
-  if (title) {
-    articles[i].title = title;
-  }
-  if (description) {
-    articles[i].description = description;
-  }
-  if (author) {
-    articles[i].author = author;
-  }
-  res.status(200);
-  res.json(articles[i]);
+  const { title, description, author } = req.body;
+  Article.findOneAndUpdate({ _id: id }, req.body, { new: true })
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 };
 
 const deleteArticleById = (req, res) => {
