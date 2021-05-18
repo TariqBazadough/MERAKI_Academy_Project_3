@@ -39,8 +39,6 @@ const getAllArticles = (req, res) => {
     .catch((err) => {
       res.json(err);
     });
-  // res.status(200);
-  // res.json(articles);
 };
 
 const getAnArticleById = (req, res) => {
@@ -58,13 +56,15 @@ const getAnArticleById = (req, res) => {
 };
 
 const getArticlesByAuthor = (req, res) => {
-  const author = req.query.author;
-  console.log(author);
-  const filterByAuthor = articles.filter((element) => {
-    return element.author === author;
-  });
-  res.status(200);
-  res.json(filterByAuthor);
+  const id = req.query.id;
+  Article.find({ author: id })
+    .then((result) => {
+      res.status(200);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 };
 
 const createNewArticle = (req, res) => {
