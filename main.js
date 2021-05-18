@@ -114,23 +114,12 @@ const deleteArticlesByAuthor = (req, res) => {
       res.status(200);
       res.json({
         success: true,
-        message: `success delete article with Id : ${id}`,
+        message: `Success delete all the articles for the author => ${id}`,
       });
     })
     .catch((err) => {
       res.json(err);
     });
-  // const author = req.body.author;
-  // articles.forEach((element, index) => {
-  //   if (element.author === author) {
-  //     articles.splice(index, 1);
-  //   }
-  // });
-  // res.status(200);
-  // res.json({
-  //   success: true,
-  //   massage: `Success delete all the articles for the author => ${author}`,
-  // });
 };
 
 const createNewAuthor = (req, res) => {
