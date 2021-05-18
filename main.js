@@ -108,17 +108,29 @@ const deleteArticleById = (req, res) => {
 };
 
 const deleteArticlesByAuthor = (req, res) => {
-  const author = req.body.author;
-  articles.forEach((element, index) => {
-    if (element.author === author) {
-      articles.splice(index, 1);
-    }
-  });
-  res.status(200);
-  res.json({
-    success: true,
-    massage: `Success delete all the articles for the author => ${author}`,
-  });
+  const id = req.body.author;
+  Article.findOneAndDelete({ author: id })
+    .then((result) => {
+      res.status(200);
+      res.json({
+        success: true,
+        message: `success delete article with Id : ${id}`,
+      });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+  // const author = req.body.author;
+  // articles.forEach((element, index) => {
+  //   if (element.author === author) {
+  //     articles.splice(index, 1);
+  //   }
+  // });
+  // res.status(200);
+  // res.json({
+  //   success: true,
+  //   massage: `Success delete all the articles for the author => ${author}`,
+  // });
 };
 
 const createNewAuthor = (req, res) => {
