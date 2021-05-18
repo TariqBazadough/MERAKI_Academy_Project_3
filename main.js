@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require("./db");
-const { User, Article } = require("./schema");
+const { User, Article, Comment } = require("./schema");
 const app = express();
 // const { v4: uuidv4 } = require("uuid");
 // const { json } = require("express");
