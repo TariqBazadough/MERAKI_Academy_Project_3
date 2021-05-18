@@ -94,14 +94,17 @@ const updateAnArticleById = (req, res) => {
 
 const deleteArticleById = (req, res) => {
   const id = req.params.id;
-  let i;
-  const found = articles.find((element, index) => {
-    i = index;
-    return element.id == id;
-  });
-  articles.splice(i, 1);
-  res.status(200);
-  res.json({ success: true, massage: `Success Delete article with id ${id}` });
+  Article.findByIdAndRemove({ _id: id })
+    .then((result) => {
+      res.status(200);
+      res.json({
+        success: true,
+        message: `success delete article with Id : ${id}`,
+      });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 };
 
 const deleteArticlesByAuthor = (req, res) => {
