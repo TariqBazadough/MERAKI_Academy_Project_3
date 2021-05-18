@@ -109,7 +109,7 @@ const deleteArticleById = (req, res) => {
 
 const deleteArticlesByAuthor = (req, res) => {
   const id = req.body.author;
-  Article.findOneAndDelete({ author: id })
+  Article.deleteMany({ author: id })
     .then((result) => {
       res.status(200);
       res.json({
