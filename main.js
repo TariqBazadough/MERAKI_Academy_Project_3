@@ -136,6 +136,19 @@ const createNewAuthor = (req, res) => {
     });
 };
 
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  const found = await User.exists({ email: email, password: password });
+  console.log(found);
+  if (found) {
+    res.status(200);
+    res.json("Valid login credentials");
+  } else {
+    res.status(401);
+    res.json("Invalid login credentials");
+  }
+};
+
 app.get("/articles", getAllArticles);
 app.post("/articles", createNewArticle);
 app.get("/articles/search_2", getAnArticleById);
@@ -144,6 +157,7 @@ app.put("/articles/:id", updateAnArticleById);
 app.delete("/articles/:id", deleteArticleById);
 app.delete("/articles", deleteArticlesByAuthor);
 app.post("/users", createNewAuthor);
+app.post("/login", login);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
