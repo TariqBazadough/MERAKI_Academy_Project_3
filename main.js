@@ -149,6 +149,33 @@ const login = async (req, res) => {
   }
 };
 
+const createNewComment = (req, res) => {
+  const article_id = req.params.id;
+  const { comment, commenter } = req.body;
+  const newComment = new Comment({ comment, commenter });
+  newComment
+    .save()
+    .then((result) => {
+      Article.findOneAndUpdate(
+        { _id: article_id },
+        { $push: { comments: result._id } },
+        { new: true }
+      )
+        .then((result_article) => {
+          console.log(result_article);
+        })
+        .catch((err) => {
+          res.json(err);
+        });
+
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
+
 app.get("/articles", getAllArticles);
 app.post("/articles", createNewArticle);
 app.get("/articles/search_2", getAnArticleById);
@@ -158,6 +185,7 @@ app.delete("/articles/:id", deleteArticleById);
 app.delete("/articles", deleteArticlesByAuthor);
 app.post("/users", createNewAuthor);
 app.post("/login", login);
+app.post("/articles/:id/comments", createNewComment);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
