@@ -2,8 +2,8 @@ const express = require("express");
 const db = require("./db");
 const { User, Article } = require("./schema");
 const app = express();
-const { v4: uuidv4 } = require("uuid");
-const { json } = require("express");
+// const { v4: uuidv4 } = require("uuid");
+// const { json } = require("express");
 
 const port = 5000;
 
@@ -60,15 +60,18 @@ const getArticlesByAuthor = (req, res) => {
 };
 
 const createNewArticle = (req, res) => {
-  const newArticle = {
-    title: req.body.title,
-    description: req.body.description,
-    author: req.body.author,
-    id: uuidv4(),
-  };
-  articles.push(newArticle);
-  res.status(201);
-  res.json(newArticle);
+  const { title, description, author } = req.body;
+  const article = new Article({ title, description, author });
+
+  article
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 };
 
 const updateAnArticleById = (req, res) => {
