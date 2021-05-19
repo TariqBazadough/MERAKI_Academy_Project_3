@@ -2,14 +2,14 @@ const express = require("express");
 const db = require("./db");
 const { User, Article, Comment } = require("./schema");
 const app = express();
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken")
+
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // const { v4: uuidv4 } = require("uuid");
 // const { json } = require("express");
 
 const port = 5000;
-const SECRET = process.env.SECRET
+const SECRET = process.env.SECRET;
 
 app.use(express.json());
 

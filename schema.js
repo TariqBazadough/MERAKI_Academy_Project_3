@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+const salt = 5;
 
 const usersSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -19,6 +21,11 @@ const articlesSchema = new mongoose.Schema({
   description: { type: String },
   author: { type: mongoose.Schema.ObjectId, ref: "User" },
   comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
+});
+
+usersSchema.pre("save", async function () {
+  this.email = this.email.toLowerCase();
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 const User = mongoose.model("User", usersSchema);
