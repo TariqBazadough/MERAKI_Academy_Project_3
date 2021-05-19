@@ -28,6 +28,8 @@ usersSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
+
+
 const User = mongoose.model("User", usersSchema);
 const Comment = mongoose.model("Comment", commentSchema);
 const Article = mongoose.model("Article", articlesSchema);

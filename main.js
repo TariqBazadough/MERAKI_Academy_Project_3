@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("./db");
 const { User, Article, Comment } = require("./schema");
 const app = express();
-
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // const { v4: uuidv4 } = require("uuid");
@@ -10,6 +10,7 @@ require("dotenv").config();
 
 const port = 5000;
 const SECRET = process.env.SECRET;
+const TOKEN_EXP_Time = process.env.TOKEN_EXP_Time;
 
 app.use(express.json());
 
@@ -140,17 +141,38 @@ const createNewAuthor = (req, res) => {
     });
 };
 
-const login = async (req, res) => {
+const login = (req, res) => {
   const { email, password } = req.body;
-  const found = await User.exists({ email: email, password: password });
-  console.log(found);
-  if (found) {
-    res.status(200);
-    res.json("Valid login credentials");
-  } else {
-    res.status(401);
-    res.json("Invalid login credentials");
-  }
+  User.findOne({ email: email })
+    .then((result) => {
+      bcrypt.compare(password, result.password, (err, match_result) => {
+        if (match_result) {
+          const payload = {
+            userId: match_result._id,
+            country: match_result.country,
+            secret: SECRET,
+          };
+
+          const options = {
+            expiresIn: TOKEN_EXP_Time,
+          };
+
+          res.status(200);
+          const token = jwt.sign(payload, SECRET, options);
+          res.json({ token: `${token}` });
+        } else {
+          res.status(403);
+          res.json({
+            message: "The password you’ve entered is incorrect",
+            status: 403,
+          });
+        }
+      });
+    })
+    .catch((err) => {
+      res.status(404);
+      res.json({ message: "The email doesn't exist", status: 404 });
+    });
 };
 
 const createNewComment = (req, res) => {
