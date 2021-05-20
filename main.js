@@ -1,12 +1,11 @@
 const express = require("express");
 const db = require("./db");
-const { User, Article, Comment } = require("./schema");
+const { User, Article, Comment, Role } = require("./schema");
 const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // const { v4: uuidv4 } = require("uuid");
-// const { json } = require("express");
 
 const port = 5000;
 const SECRET = process.env.SECRET;
@@ -127,9 +126,31 @@ const deleteArticlesByAuthor = (req, res) => {
     });
 };
 
+const createNewRole = (req, res) => {
+  const { role, permissions } = req.body;
+  const newRole = new Role({ role, permissions });
+  newRole
+    .save()
+    .then((result) => {
+      res.status(201);
+      res.json(result);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+};
+
 const createNewAuthor = (req, res) => {
-  const { firstName, lastName, age, country, email, password } = req.body;
-  const user = new User({ firstName, lastName, age, country, email, password });
+  const { firstName, lastName, age, country, email, password, role } = req.body;
+  const user = new User({
+    firstName,
+    lastName,
+    age,
+    country,
+    email,
+    password,
+    role,
+  });
   user
     .save()
     .then((result) => {
@@ -148,9 +169,9 @@ const login = (req, res) => {
       bcrypt.compare(password, result.password, (err, match_result) => {
         if (match_result) {
           const payload = {
-            userId: match_result._id,
-            country: match_result.country,
-            secret: SECRET,
+            userId: result._id,
+            country: result.country,
+            role: result.role,
           };
 
           const options = {
@@ -188,7 +209,7 @@ const createNewComment = (req, res) => {
         { new: true }
       )
         .then((result_article) => {
-          console.log(result_article);
+          // console.log(result_article);
         })
         .catch((err) => {
           res.json(err);
@@ -212,6 +233,7 @@ const authentication = (req, res, next) => {
         status: 403,
       });
     } else {
+      req.token = result;
       next();
     }
   });
@@ -227,6 +249,7 @@ app.delete("/articles", deleteArticlesByAuthor);
 app.post("/users", createNewAuthor);
 app.post("/login", login);
 app.post("/articles/:id/comments", authentication, createNewComment);
+app.post("/role", createNewRole);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
