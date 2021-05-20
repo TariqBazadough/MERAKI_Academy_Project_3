@@ -239,6 +239,23 @@ const authentication = (req, res, next) => {
   });
 };
 
+const authorization = (string) => {
+  return (req, res, next) => {
+    const role_id = req.token.role;
+    Role.findOne({ _id: role_id }).then((result) => {
+      const perms = result.permissions;
+      const found = perms.find((element) => {
+        return element === string;
+      });
+      if (found) {
+        next();
+      } else {
+        res.json({ message: "forbidden ", status: 403 });
+      }
+    });
+  };
+};
+
 app.get("/articles", getAllArticles);
 app.post("/articles", createNewArticle);
 app.get("/articles/search_2", getAnArticleById);
@@ -248,7 +265,12 @@ app.delete("/articles/:id", deleteArticleById);
 app.delete("/articles", deleteArticlesByAuthor);
 app.post("/users", createNewAuthor);
 app.post("/login", login);
-app.post("/articles/:id/comments", authentication, createNewComment);
+app.post(
+  "/articles/:id/comments",
+  authentication,
+  authorization("CREATE_COMMENT"),
+  createNewComment
+);
 app.post("/role", createNewRole);
 
 app.listen(port, () => {
