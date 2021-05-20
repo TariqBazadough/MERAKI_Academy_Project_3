@@ -202,6 +202,21 @@ const createNewComment = (req, res) => {
     });
 };
 
+const authentication = (req, res, next) => {
+  const token = req.headers.authorization.split(" ").pop();
+  jwt.verify(token, SECRET, (err, result) => {
+    if (err) {
+      res.status(403);
+      return res.json({
+        message: "The token is invalid or expired",
+        status: 403,
+      });
+    } else {
+      next();
+    }
+  });
+};
+
 app.get("/articles", getAllArticles);
 app.post("/articles", createNewArticle);
 app.get("/articles/search_2", getAnArticleById);
@@ -211,7 +226,7 @@ app.delete("/articles/:id", deleteArticleById);
 app.delete("/articles", deleteArticlesByAuthor);
 app.post("/users", createNewAuthor);
 app.post("/login", login);
-app.post("/articles/:id/comments", createNewComment);
+app.post("/articles/:id/comments", authentication, createNewComment);
 
 app.listen(port, () => {
   console.log(`Server is working on Port : ${port}`);
