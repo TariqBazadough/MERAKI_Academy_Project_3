@@ -32,11 +32,9 @@ const Register = () => {
   };
   return (
     <div className="register">
-      <div>
+      <div className="register-content">
         <p>Register:</p>
-      </div>
 
-      <div>
         <input
           className="input"
           type="text"
@@ -45,8 +43,7 @@ const Register = () => {
             setFirstName(e.target.value);
           }}
         ></input>
-      </div>
-      <div>
+
         <input
           className="input"
           type="text"
@@ -55,8 +52,7 @@ const Register = () => {
             setLastName(e.target.value);
           }}
         ></input>
-      </div>
-      <div>
+
         <input
           className="input"
           type="nubmer"
@@ -65,8 +61,6 @@ const Register = () => {
             setAge(e.target.value);
           }}
         ></input>
-      </div>
-      <div>
         <input
           className="input"
           type="text"
@@ -75,8 +69,7 @@ const Register = () => {
             setCountry(e.target.value);
           }}
         ></input>
-      </div>
-      <div>
+
         <input
           className="input"
           type="text"
@@ -85,8 +78,7 @@ const Register = () => {
             setEmail(e.target.value);
           }}
         ></input>
-      </div>
-      <div>
+
         <input
           className="input"
           type="password"
@@ -95,13 +87,13 @@ const Register = () => {
             setPassword(e.target.value);
           }}
         ></input>
-      </div>
-      <div>
-        <button className="registerButton" onClick={createUser}>
+
+        <button className="done-button" onClick={createUser}>
           Register
         </button>
+
+        <div className="message">{message}</div>
       </div>
-      <div className="message">{message}</div>
     </div>
   );
 };

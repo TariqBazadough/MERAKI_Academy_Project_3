@@ -13,7 +13,24 @@
   margin-top: 4px;
 }
 
-.registerButton {
+.login {
+  border: 5px solid purple;
+  margin-top: 4px;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.login-content {
+  display: grid;
+  width: 30%;
+}
+
+.register-content {
+  display: grid;
+  width: 30%;
+}
+
+.done-button {
   background-color: cornflowerblue;
   margin-top: 4px;
 }
