@@ -1,0 +1,29 @@
+.navigation {
+  display: flex;
+  gap: 16px;
+  border: 5px solid red;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.register {
+  border: 5px solid blue;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 4px;
+}
+
+.registerButton {
+  background-color: cornflowerblue;
+  margin-top: 4px;
+}
+
+.input {
+  padding: 4px;
+  margin-top: 4px;
+}
+
+.message {
+  padding: 4px;
+  margin-top: 4px;
+}
