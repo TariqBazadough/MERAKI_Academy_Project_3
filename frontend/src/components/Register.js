@@ -7,7 +7,7 @@ const Register = () => {
   const [message, setMessage] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [age, setAge] = useState("");
+  const [age, setAge] = useState(0);
   const [country, setCountry] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,14 +17,9 @@ const Register = () => {
     axios
       .post(`http://localhost:5000/users`, user)
       .then((res) => {
-        console.log(user);
-        console.log(res.data);
-
         if (res.data.name) {
-          // "Error happened while register, please try again"
           setMessage("Error happened while register, please try again");
         } else {
-          // "The user has been created successfully"
           setMessage("The user has been created successfully");
         }
       })
@@ -92,7 +87,7 @@ const Register = () => {
           Register
         </button>
 
-        <div className="message">{message}</div>
+        {message && <div className="message">{message}</div>}
       </div>
     </div>
   );
